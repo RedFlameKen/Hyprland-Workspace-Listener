@@ -2,5 +2,5 @@
 
 #include <stdint.h>
 
-int8_t listen_to_socket();
-void listen_process();
+int8_t listen_to_socket(uint8_t* socket_fd);
+int8_t listen_process();
