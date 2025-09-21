@@ -1,6 +1,6 @@
 sources := $(shell find src/ -iname "*.c")
 headers := $(shell find src/ -iname "*.h")
-build_path := build/
+build_path := build
 executable := hypr-ws-listener
 deps := json-c
 
