@@ -2,9 +2,17 @@
 
 #include <stdint.h>
 #define BUFFER_SIZE 1024
-#define WORKSPACE_BUFFER_SIZE 4098
+#define READ_BUFFER_SIZE 256
+#define WORKSPACE_BUFFER_SIZE 2048
+#define WORKSPACE_ITEM_BUFFER_SIZE 2048
 
 #define PERSISTENT_WS_COUNT 5
 
-int8_t get_used_workspaces(uint8_t dest_buffer[10], uint8_t* ws_count);
-int8_t build_eww_workspace(char* dest_buffer, uint8_t active_ws);
+typedef struct _workspace_t {
+    uint8_t is_active;
+    uint8_t used;
+    uint8_t number;
+} workspace_t;
+
+int8_t build_eww_workspace(char* dest_buffer);
+int8_t get_workspaces(workspace_t* workspaces);
