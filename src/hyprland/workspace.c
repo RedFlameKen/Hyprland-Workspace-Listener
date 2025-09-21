@@ -63,10 +63,11 @@ int sort_by_id(const void* a, const void* b){
 int8_t get_active_ws(){
     char* output = execute_hyprctl_command("[-j]/monitors");
     json_object* json = json_tokener_parse(output);
+    uint8_t id;
 
     if(json_object_get_type(json) != json_type_array){
-        free(output);
-        return 0;
+        id = 0;
+        goto exit_node;
     }
 
     size_t len = json_object_array_length(json);
@@ -75,8 +76,8 @@ int8_t get_active_ws(){
         json_object* monitor = json_object_array_get_idx(json, i);
         json_object* focused_obj;
         if(!json_object_object_get_ex(monitor, "focused", &focused_obj)){
-            free(output);
-            return -1;
+            id = -1;
+            goto exit_node;
         }
         uint8_t is_focused = json_object_get_boolean(focused_obj);
         if(!is_focused){
@@ -87,17 +88,19 @@ int8_t get_active_ws(){
 
     json_object *active_ws, *id_obj;
     if(json_object_object_get_ex(focused_monitor, "activeWorkspace", &active_ws) == 0){
-        free(output);
-        return -1;
+        id = -1;
+        goto exit_node;
     }
 
     if(json_object_object_get_ex(active_ws, "id", &id_obj) == 0){
-        free(output);
-        return -1;
+        id = -1;
+        goto exit_node;
     }
 
-    uint8_t id = json_object_get_int(id_obj);
+    id = json_object_get_int(id_obj);
 
+exit_node:
+    json_object_put(json);
     free(output);
     return id;
 }
@@ -124,10 +127,11 @@ int8_t get_workspaces(workspace_t* workspaces){
     init_workspaces(workspaces);
     char* output = execute_hyprctl_command("[-j]/workspaces");
     json_object* json = json_tokener_parse(output);
+    uint8_t ret = 0;
 
     if(json_object_get_type(json) != json_type_array){
-        free(output);
-        return 0;
+        ret = -1;
+        goto exit_node;
     }
 
     json_object_array_sort(json, sort_by_id);
@@ -146,8 +150,11 @@ int8_t get_workspaces(workspace_t* workspaces){
     uint8_t active_ws = get_active_ws();
     workspaces[active_ws-1].is_active = 1;
     workspaces[active_ws-1].number = active_ws;
+
+exit_node:
+    json_object_put(json);
     free(output);
-    return 0;
+    return ret;
 }
 
 int8_t build_eww_workspace(char* dest_buffer){

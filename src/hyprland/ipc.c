@@ -116,6 +116,9 @@ int8_t listen_process(){
     create_socket_path_2(socket_path, runtime_dir, instance_sig);
 
     uint8_t socket2_fd = connect_to_socket(socket_path);
+
+    free(socket_path);
+
     action_workspace();
     while(running){
         char buffer[READ_BUFFER_SIZE] = {0};
