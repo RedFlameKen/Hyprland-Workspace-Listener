@@ -15,7 +15,7 @@
 #include <sys/un.h>
 
 #define READ_STEP 128
-#define WORKSPACE_REPLY_SIZE 2048
+#define WORKSPACE_REPLY_SIZE 4096
 
 static const char SOCKET_PATH_FORMAT[] = "%s/hypr/%s/.socket.sock";
 static const char SOCKET2_PATH_FORMAT[] = "%s/hypr/%s/.socket2.sock";
