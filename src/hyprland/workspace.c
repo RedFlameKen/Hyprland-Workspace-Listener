@@ -136,8 +136,6 @@ int8_t get_workspaces(workspace_t* workspaces){
 
     json_object_array_sort(json, sort_by_id);
     size_t len = json_object_array_length(json);
-    size_t cur_ws = 0;
-    size_t persistent_ws_count = 0;
     for (int i = 0; i < len; i++) {
         json_object* ws_item = json_object_array_get_idx(json, i);
         json_object* id_obj;
